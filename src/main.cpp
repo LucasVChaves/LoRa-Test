@@ -60,7 +60,7 @@ ReceivedMsg receive_lora_msg() {
 *  Uso opcional
 */
 void send_response() {
-    String resp = "ACK: Mensagem recebida pelo ESP"; // Msg de acknowledgment
+    String resp = "ACK: Mensagem recebida pelo ESP\n"; // Msg de acknowledgment
 
     ResponseStatus rs = e22ttl.sendMessage(resp);
     if (rs.code != 1) {
@@ -78,7 +78,7 @@ void send_test_msg() {
     if (rs.code == 1) {
         Serial.println("Mensagem de teste enviada");
     } else {
-        Serial.print("Erro ao enviar mensagem de teste:");
+        Serial.print("Erro ao enviar mensagem de teste: ");
         Serial.println(rs.getResponseDescription());
     }
 }
@@ -121,11 +121,11 @@ void setup() {
     // OS ENDPOINTS SERÃO TRANSMIT E OS GATEWAYS RECEIVER POR AGORA
     // Na protoboard o TRANSMIT é o com termômetro e o RECEIVER o sem
     // WOR TRANSMIT MODE
-    //digitalWrite(LORA_M0_PIN, HIGH);
-    //digitalWrite(LORA_M1_PIN, HIGH);
-    // WOR RECEIVE MODE
     digitalWrite(LORA_M0_PIN, HIGH);
-    digitalWrite(LORA_M1_PIN, LOW);
+    digitalWrite(LORA_M1_PIN, HIGH);
+    // WOR RECEIVE MODE
+    //digitalWrite(LORA_M0_PIN, HIGH);
+    //digitalWrite(LORA_M1_PIN, LOW);
 
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
@@ -153,7 +153,8 @@ void setup() {
         // Aqui eh possivel mudar canal e enderecos sem precisar usar aquele programa chines estranho
         config_container.close();
     } else {
-        Serial.printf("Erro: Nao foi possivel ler a configuracao do modulo");
+        Serial.println("Erro: Nao foi possivel ler a configuracao do modulo");
+        Serial.println(config_container.status.getResponseDescription());
     }
 }
 
@@ -167,7 +168,7 @@ void loop() {
             display_received_msg(msg);
 
             // Opcional
-            send_response();
+            //send_response();
         }
     }
 
